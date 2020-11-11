@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css">
+    <link rel="stylesheet" href="site.css">
+    <title>Vending Machine</title>
+</head>
+<body>
+    <div class="container">
+        <h1><i>Vending machine</i></h1>
+        <div class="col-md-8 machine" data-bind="foreach: cells">
+            <div class="col-md-4 cell" data-bind="click: $parent.select, css: {selected: $parent.selectedCell().product === $data.product, sold: sold}">
+                <div class="col-md-6 image">
+                    <img data-bind="attr: {src: product.category.getImageUrl(), alt: product.category.name }" />
+                </div>
+                <div class="col-md-4 productInfo">
+                    <div data-bind="text: product.name"></div>
+                    <h4 data-bind="text: stock"></h4>
+                    <h4 data-bind="text: 'R ' + product.price"></h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h4>
+                insert coin by clicking: R
+                <span id="total" data-bind="text: paid"></span>
+            </h4>
+            <div data-bind="foreach: acceptedCoins">
+                <img data-bind="attr: { src: getImageUrl(), alt: value}, click: $parent.acceptCoin" />
+            </div>
+
+            <h3 data-bind="with: selectedCell">
+                <div data-bind="text: product.name"></div>
+                <div>
+                    R <span data-bind="text: product.price"></span>
+                </div>
+            </h3>
+
+            <button class="btn btn-primary payButton" data-bind="enable: canPay, click: pay">Pay</button>
+            <h6>The balance will remain on your account</h6>
+            <h7>Refund only when we out of stock</h7>
+            
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js"></script>
+
+    <script>
+        require(["js/vendingMachine"], function(machineModule){
+            var machine = new machineModule.VendingMachine();
+            machine.size = machineModule.VendingMachineSize.medium;
+            ko.applyBindings(machine);
+        });
+    </script>
+</body>
+</html>
